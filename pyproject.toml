@@ -1,0 +1,17 @@
+[project]
+name = "ha_mqtt_discovery"
+version = "0.1.0"
+authors = [
+    { name = "TheEvilRoot", email = "theevilroot@theevilroot.xyz" }
+]
+description = "Simple library to dynamically create MQTT discovery configuration for Home Assistant"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/TheEvilRoot/ha-mqtt-discovery"
+Issues = "https://github.com/TheEvilRoot/ha-mqtt-discovery/issues"
