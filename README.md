@@ -27,7 +27,7 @@ discovery_config.sensor(name='CPU Frequency',
                         state_class='measurement',
                         precision=0)
 # ...
-send_message(client, discovery_config.state_topic_of('cpu_percent'), cpu_percent)
+send_message(client, discovery_config.state_topic_of('cpu_percent'), {'cpu_percent': cpu_percent})
 ```
 
 ### Install
