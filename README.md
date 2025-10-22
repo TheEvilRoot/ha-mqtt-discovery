@@ -7,6 +7,39 @@ It provides simple to use interface to setup device, origin and component config
 with JSON output. Use helper functions like `sensor()`, `switch()`, etc to add
 components to discovery config.
 
+### Api coverage
+
+> Currently, all coverage described below is partial
+
+- [ ] Alarm control panel
+- [ ] Binary sensor
+- [x] Button
+- [ ] Camera
+- [ ] Cover
+- [ ] Climate (HVAC)
+- [ ] Device tracker
+- [ ] Device trigger
+- [ ] Event
+- [ ] Fan
+- [ ] Humidifier
+- [ ] Image
+- [ ] Lawn mower
+- [ ] Light
+- [x] Lock
+- [ ] Notify
+- [ ] Number
+- [ ] Scene
+- [ ] Select
+- [x] Sensor
+- [ ] Siren
+- [ ] Switch
+- [ ] Update
+- [ ] Tag scanner
+- [ ] Text
+- [ ] Vacuum
+- [ ] Valve
+- [ ] Water heater
+
 ### Example:
 ```python
 discovery_config = DiscoveryConfig('server_1', 'mqstats')

@@ -40,6 +40,49 @@ class DiscoveryConfig:
                 return sensor_id
         return None
 
+    def lock(self, name: str, sensor_id: str, cmd_topic: str = None, state_topic: str = None, cmd_template: str = None, code_format: str = None, optimistic: bool = True, retain: bool = True, unique_id: str = None):
+        if sensor_id is None:
+            sensor_id = sanitize_name(name)
+        if cmd_topic is None:
+            cmd_topic = f'{self.base_topic}/{self.device_id}/{sensor_id}/set'
+        if state_topic is None:
+            state_topic = f'{self.base_topic}/{self.device_id}/{sensor_id}/state'
+        if unique_id is None:
+            unique_id = f'{self.device_id}_{sensor_id}'
+        self.components[sensor_id] = {
+            'name': name,
+            'platform': 'lock',
+            'command_topic': cmd_topic,
+            'state_topic': state_topic,
+            'unique_id': unique_id,
+            'optimistic': optimistic,
+            'code_format': code_format,
+            'retain': retain,
+            'command_template': cmd_template
+        }
+        return self
+
+
+    def button(self, name: str, sensor_id: str = None, cmd_topic: str = None, device_class: str = None, payload_press: str = None, retain: bool = False, unique_id: str = None):
+        if sensor_id is None:
+            sensor_id = sanitize_name(name)
+        if cmd_topic is None:
+            cmd_topic = f'{self.base_topic}/{self.device_id}/{sensor_id}/set'
+        if unique_id is None:
+            unique_id = f'{self.device_id}_{sensor_id}'
+        if payload_press is None:
+            payload_press = 'PRESS'
+        self.components[sensor_id] = {
+            'name': name,
+            'platform': 'button',
+            'device_class': device_class,
+            'command_topic': cmd_topic,
+            'payload_press': payload_press,
+            'retain': retain,
+            'unique_id': unique_id
+        }
+        return self
+
     def switch(self, name: str, sensor_id: str = None, state_topic: str = None, cmd_topic: str = None, unique_id: str = None):
         if sensor_id is None:
             sensor_id = sanitize_name(name)
@@ -62,7 +105,7 @@ class DiscoveryConfig:
         }
         return self
 
-    def sensor(self, name: str, device_class: Optional[str], unit_of_measurement: str, value_template: str, sensor_id: str = None, precision: int = 1, state_topic: str = None, unique_id = None, state_class: str = 'measurement'):
+    def sensor(self, name: str, device_class: Optional[str], unit_of_measurement: Optional[str], value_template: str, sensor_id: str = None, precision: Optional[int] = None, state_topic: str = None, unique_id = None, state_class: str = 'measurement'):
         if sensor_id is None:
             sensor_id = sanitize_name(name)
         if unique_id is None:
