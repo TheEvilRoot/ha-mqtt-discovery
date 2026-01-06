@@ -5,15 +5,12 @@ import time
 
 if __name__ == '__main__':
     from paho.mqtt.client import Client
-    from ha_mqtt_discovery import DiscoveryConfig
+    from ha_mqtt_discovery import Discovery, Device, Lock
 
-    discovery = DiscoveryConfig('sample', 'sample')
-    discovery.device('Sample device', 'Model', 'sample_device')
-    discovery.origin('sample', '1.0.0', 'http://example.com')
-    discovery.lock(name='Lock',
-                   sensor_id='simple_lock',
-                   code_format='^\\d{4}$',
-                   cmd_template='{ "action": "{{ value }}", "code":"{{ code }}" }')
+    discovery = Discovery('sample')
+    device = Device(discovery, 'Sample Device', 'sample_device', 'Sample Model', 'sample_model')
+    lock = Lock(device, 'Lock', code_format='^\\d{4}$',
+                cmd_template='{ "action": "{{ value }}", "code":"{{ code }}" }')
 
     client = Client()
     if os.environ.get('MQTT_USER'):
@@ -21,30 +18,30 @@ if __name__ == '__main__':
 
 
     lock_state = 'LOCKED'
-    def on_message(client, userdata, message):
+    def on_message(client, u, message):
         global lock_state
         print(f'Received message: {message.topic} {message.payload}')
-        if message.topic == discovery.command_topic_of('simple_lock'):
+        if message.topic == lock.cmd_topic:
             request = json.loads(message.payload.decode())
             code = request['code']
             action = request['action']
             code_valid = code == '1122'
             if not code_valid:
                 print(f'Invalid code: {code}')
-                client.publish(discovery.state_topic_of('simple_lock'), lock_state)
+                client.publish(lock.state_topic, lock_state)
                 return
             if action == 'LOCK':
                 lock_state = 'LOCKED'
-                client.publish(discovery.state_topic_of('simple_lock'), lock_state)
+                client.publish(lock.state_topic, lock_state)
             elif action == 'UNLOCK':
                 lock_state = 'UNLOCKED'
-                client.publish(discovery.state_topic_of('simple_lock'), lock_state)
+                client.publish(lock.state_topic, lock_state)
 
     client.on_message = on_message
     client.connect(os.environ.get('MQTT_HOST', 'localhost'), 1883)
     client.loop_start()
-    client.publish(discovery.topic, json.dumps(discovery.build()))
-    client.subscribe(discovery.command_topic_of('simple_lock'))
+    client.publish(discovery.discovery_topic(), json.dumps(discovery.build()))
+    client.subscribe(lock.cmd_topic)
 
     while True:
         time.sleep(10)

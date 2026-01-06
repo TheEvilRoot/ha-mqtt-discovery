@@ -4,8 +4,7 @@ Simple library to dynamically create MQTT discovery configuration
 for Home Assistant and use it for publishing sensor data to MQTT broker.
 
 It provides simple to use interface to setup device, origin and component configurations 
-with JSON output. Use helper functions like `sensor()`, `switch()`, etc to add
-components to discovery config.
+with JSON output. 
 
 ### Api coverage
 
@@ -41,27 +40,8 @@ components to discovery config.
 - [ ] Water heater
 
 ### Example:
-```python
-discovery_config = DiscoveryConfig('server_1', 'mqstats')
-discovery_config.device('Server 1', 'Mac Mini M1', 'mac_mini_m1')
-discovery_config.origin('mqstats', '1.1', 'https://github.com/TheEvilRoot/mqstats')
-discovery_config.sensor(name='CPU%',
-                        device_class=None,
-                        unit_of_measurement='%',
-                        value_template='{{ value_json.cpu_percent | round(1) }}',
-                        sensor_id='cpu_percent',
-                        state_class='measurement',
-                        precision=1)
-discovery_config.sensor(name='CPU Frequency',
-                        device_class='frequency',
-                        unit_of_measurement='Mhz',
-                        value_template='{{ value_json.cpu_freq | int }}',
-                        sensor_id='cpu_percent',
-                        state_class='measurement',
-                        precision=0)
-# ...
-send_message(client, discovery_config.state_topic_of('cpu_percent'), {'cpu_percent': cpu_percent})
-```
+
+See examples in [examples](examples) folder...
 
 ### Install
 
